@@ -43,8 +43,17 @@ export const mockDb = {
             throw { response: { status: 401, data: { message: 'Invalid credentials' } } };
         }
 
-        // Simulate a JWT token
-        const token = btoa(JSON.stringify({ id: user.id, email: user.email, role: user.role }));
+        // Simulate a JWT token (header.payload.signature)
+        const header = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+        const payload = btoa(JSON.stringify({
+            userId: user.id,
+            sub: user.email,
+            role: user.role,
+            exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24) // 24 hours
+        }));
+        const signature = "dummy_signature";
+        const token = `${header}.${payload}.${signature}`;
+
         return { data: { token, user } };
     }
 };
