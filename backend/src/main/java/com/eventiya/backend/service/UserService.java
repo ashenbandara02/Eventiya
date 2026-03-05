@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    
     @Autowired
     private UserRepository userRepository;
 
@@ -27,7 +26,6 @@ public class UserService {
                 user.getContact(),
                 user.getRole().name());
     }
-
     @Transactional
     public ProfileResponse updateUserProfile(String email, ProfileUpdateRequest request) {
         User user = userRepository.findByEmail(email)
@@ -40,8 +38,7 @@ public class UserService {
             user.setContact(request.getContact());
         }
 
-        userRepository.save(user);
-
+        userRepository.save(user)
         return new ProfileResponse(
                 user.getId(),
                 user.getName(),
