@@ -80,7 +80,10 @@ public class WebSecurityConfig {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://localhost:5173", "http://127.0.0.1:5173")); // Vite default port
+        configuration.setAllowedOrigins(
+                List.of("http://localhost:5173", "http://127.0.0.1:5173", "https://gp28-se.github.io")); // Vite default
+                                                                                                         // port +
+                                                                                                         // Production
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type"));
         configuration.setAllowCredentials(true);

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { LogIn, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { motion } from 'framer-motion';
+import API_BASE_URL from '../apiConfig';
 
 export default function Login() {
     const [email, setEmail] = useState('');
@@ -20,7 +21,7 @@ export default function Login() {
         setLoading(true);
 
         try {
-            const response = await axios.post('http://localhost:8080/api/auth/login', {
+            const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
                 email,
                 password
             });
