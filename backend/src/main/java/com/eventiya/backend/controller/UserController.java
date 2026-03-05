@@ -1,9 +1,11 @@
 package com.eventiya.backend.controller;
 
-import com.eventiya.backend.dto.ProfileResponse;
-import com.eventiya.backend.dto.ProfileUpdateRequest;
-import com.eventiya.backend.service.UserService;
+import com.eventiya.backend.dto.UserProfileResponse;
+import com.eventiya.backend.dto.UpdateUserRequest;
+import com.eventiya.backend.service.AccountService;
+
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -11,27 +13,31 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/users")
-public class UserController {
+@RequestMapping("/api/account")
+public class AccountController {
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
-    @GetMapping("/profile")
-    public ResponseEntity<ProfileResponse> getProfile() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
+    @GetMapping("/me")
+    public ResponseEntity<UserProfileResponse> viewProfile() {
 
-        ProfileResponse profile = userService.getUserProfile(currentPrincipalName);
-        return ResponseEntity.ok(profile);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        UserProfileResponse response = accountService.fetchUserProfile(username);
+
+        return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/profile")
-    public ResponseEntity<ProfileResponse> updateProfile(@Valid @RequestBody ProfileUpdateRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
+    @PatchMapping("/update")
+    public ResponseEntity<UserProfileResponse> editProfile(@Valid @RequestBody UpdateUserRequest request) {
 
-        ProfileResponse updatedProfile = userService.updateUserProfile(currentPrincipalName, request);
-        return ResponseEntity.ok(updatedProfile);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+
+        UserProfileResponse updatedUser = accountService.modifyUserProfile(username, request);
+
+        return ResponseEntity.ok(updatedUser);
     }
 }
